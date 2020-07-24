@@ -20,7 +20,7 @@ Still, I left out some parts from the GitHub version that you will need to add y
 - You must use a VPN to avoid lockouts
 - If lockouts persist after excess usage, there is a BrowserMob-Proxy file that can be uncommented
 - You must install the appropriate webdriver for your browser and add it to your PATH 
-  --- here's a handout for you if you're using Chrome: https://chromedriver.chromium.org/downloads
+  here's a handout for you if you're using Chrome: https://chromedriver.chromium.org/downloads
 
 Alternatively you can email me directly at maxwellmdg@gmail.com and I can send you a functioning .exe appropriate for your system.
 
