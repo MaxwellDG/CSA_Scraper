@@ -6,3 +6,20 @@ The CSA website has several blocks against traditional methods of scraping, so t
 
 
 
+
+
+
+
+
+
+
+### Important if you want to use this software
+This software was created for a client, but there is no copyright protection if you would also like to have it.
+Still, I left out some parts from the GitHub version that you will need to add yourself.
+
+- You must use a VPN to avoid lockouts
+- If lockouts persist after excess usage, there is a BrowserMob-Proxy file that can be uncommented
+- You must install the appropriate webdriver for your browser and add it to your PATH
+
+Alternatively you can email me directly at maxwellmdg@gmail.com and I can send you a functioning .exe appropriate for your system.
+
