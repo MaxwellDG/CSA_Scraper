@@ -13,7 +13,7 @@ The CSA website has several blocks against traditional methods of scraping, so t
 
 
 
-### Important if you want to use this software
+### * Important if you want to use this software *
 This software was created for a client, but there is no copyright protection if you would also like to have it.
 Still, I left out some parts from the GitHub version that you will need to add yourself.
 
