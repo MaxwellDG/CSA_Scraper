@@ -6,7 +6,13 @@ The CSA website has several blocks against traditional methods of scraping, so t
 
 ![Main_Interface_Photo](https://github.com/MaxwellDG/CSA_Scraper/blob/master/CSA-Photo1.png?raw=true)
 
+##Output
 
+Below is an example of a generated .csv file after comparison.
+
+![Output_Photo](https://github.com/MaxwellDG/CSA_Scraper/blob/master/CSA-Photo3.png?raw=true)
+
+A generated .csv file after selecting 'Generate Names' will look very similar; typically with thousands more rows.
 
 
 
