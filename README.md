@@ -6,7 +6,7 @@ The CSA website has several blocks against traditional methods of scraping, so t
 
 ![Main_Interface_Photo](https://github.com/MaxwellDG/CSA_Scraper/blob/master/CSA-Photo1.png?raw=true)
 
-##Output
+## Output
 
 Below is an example of a generated .csv file after comparison.
 
