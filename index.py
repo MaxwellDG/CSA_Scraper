@@ -10,6 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
 
 
 class AdvancedScraper:
@@ -34,6 +35,7 @@ class AdvancedScraper:
         self.currentPage = 1
         self.currentSecurity = 0
         self.totalPages = 0
+        self.previousNumber = 0
         # self.proxy = ProxyManager()
         # self.server = self.proxy.start_server()
         # self.client = self.proxy.start_client()
@@ -50,9 +52,23 @@ class AdvancedScraper:
         return webdriver.Chrome(options=options)
 
     def getTotalPages(self):
-        totalResultsString = self.driver.find_element_by_id("ctl00_bodyContent_lbl_count").text
-        totalResults = int(re.search(r'\d+', totalResultsString).group())
-        totalPagesHere = math.ceil(totalResults / 100)
+        # WebDriverWait(self.driver, 30).until(EC.presence_of_element_located("#tblIndivResults_info"))
+        self.driver.implicitly_wait(30)
+        totalResultsString = self.driver.find_element(By.ID, 'tblIndivResults_info')
+        
+        # Get all the elements available with tag name 'p'
+        elements = totalResultsString.find_elements(By.TAG_NAME, 'p')
+        for e in elements:
+            print(e)
+            print(e.text)
+
+        print("who dis")
+        print(totalResultsString.text)
+
+        totalResults = re.findall(r'\d+', totalResultsString.text)
+        print("total results: ", totalResults)
+
+        totalPagesHere = math.ceil(int(totalResults[-1]) / 100)
         return self.totalPages + totalPagesHere
 
     def getSecurityForSearch(self, entryText, listBoxSelection):
@@ -66,13 +82,11 @@ class AdvancedScraper:
         # initial navigation into search results
         self.driver.set_page_load_timeout(30)
         self.driver.get(AdvancedScraper.baseUrlForSelenium)
-        self.driver.find_element_by_id("anchDetailedSearch").click()
+        self.driver.find_element(By.ID, "textAdvSearch").click()
         self.driver.implicitly_wait(30)
-        firmInput = self.driver.find_element_by_id("ctl00_bodyContent_txtFirmName")
+        firmInput = self.driver.find_element(By.ID, "txtDetSearchFirmName")
         firmInput.send_keys(searchText)
-
-        self.driver.find_element_by_id("ctl00_bodyContent_iBtnDetailedSearch").click()
-        self.driver.implicitly_wait(30)
+        self.driver.find_element(By.ID, "btnSearch").click()
 
         # record the total pages so Selenium knows the limit for "NextPage" clicks
         self.totalPages = self.getTotalPages()
@@ -82,22 +96,21 @@ class AdvancedScraper:
                 "Alert: Preserve Logs",
                 "Open devtools -> click \"Network\" tab -> checkmark \"Preserve Logs\". Keep DevTools window open."):
             try:
-
                 WebDriverWait(self.driver, 30).until(
-                    EC.presence_of_element_located((By.ID, "ctl00_bodyContent_list_num_per_page")))
+                    EC.presence_of_element_located((By.NAME, "tblIndivResults_length")))
             finally:
-                elementSelectLength = Select(self.driver.find_element_by_id("ctl00_bodyContent_list_num_per_page"))
-                elementSelectLength.select_by_index(2)
+                elementSelectLength = Select(self.driver.find_element(By.NAME, "tblIndivResults_length"))
+                elementSelectLength.select_by_index(3)
                 self.clickThroughPages()
 
     def clickThroughPages(self):
         while self.currentPage < self.totalPages:
             try:
-                WebDriverWait(self.driver, 30).until(
-                    EC.presence_of_element_located((By.ID, "ctl00_bodyContent_lbtnNext")))
+                WebDriverWait(self.driver, 30).until(EC.presence_of_element_located(By.ID, "tblIndivResults_next"))
+                self.driver.find_element(By.ID, "tblIndivResults_next").click();
+            except :
+                (org.openqa.selenium.StaleElementReferenceException ex)
             finally:
-                self.driver.find_element_by_id("ctl00_bodyContent_lbtnNext").click()
-                # find something better here than just sleeping
                 time.sleep(5)
                 self.currentPage = self.currentPage + 1
 
