@@ -72,9 +72,8 @@ class TkUI:
         if type(message) == str:
             return tkMessageBox.askokcancel(title=title, message=message)
         else:
-            totalSize = 0
-            for list in message:
-                totalSize = totalSize + list.__len__()
+            print('Message', message)
+            totalSize = len(message)
             dialogResponse = tkMessageBox.askokcancel(title=title, message="There are %d heads to hunt \n\n"
                                                                            "Find them at: %s" % (totalSize, location))
         return dialogResponse
@@ -87,41 +86,28 @@ class TkUI:
     def checkForEqualRows(self, leftBox, rightBox):
         return leftBox.size() == rightBox.size()
 
-    def isComparisonOfSameSecurity(self, oldFile, recentFile):
-        listSecs = [recentFile[0][1], recentFile[10][1], recentFile[5][1], recentFile[11][1], recentFile[6][1]]
-        for i in range(10):
-            if listSecs.__contains__(oldFile[i][1]):
-                return True
-        return False
-
     def compareFiles(self, listBoxBotLeft, listBoxBotRight):
         if self.checkForEqualRows(listBoxBotLeft, listBoxBotRight):
             oldFiles = listBoxBotLeft.get(0, (listBoxBotLeft.size() - 1))
             recentFiles = listBoxBotRight.get(0, (listBoxBotRight.size() - 1))
 
-            listOfOldResults = []
-            listOfRecentResults = []
             for i in range(len(oldFiles)):
                 oldFileParsed = parserr.parse(oldFiles[i], self.homeDir)
                 recentFileParsed = parserr.parse(recentFiles[i], self.homeDir)
-                if self.isComparisonOfSameSecurity(oldFileParsed, recentFileParsed):
-                    listOfOldResults.append(oldFileParsed)
-                    listOfRecentResults.append(recentFileParsed)
+                if parserr.isComparisonOfSameSecurity(oldFiles[i], recentFiles[i], self.homeDir):
+                    listOfPrey = parserr.compareDicts(oldFileParsed, recentFileParsed)
+
+                    print("List of prey:", listOfPrey)
+
+                    self.refreshFields([listBoxBotRight, listBoxBotLeft])
+                    subDirFolder = os.path.join(self.homeDir, "Comparisons-CSV")
+                    # this is horrible form but I'm tired. The method below returns file location but also does a bunch of other stuff
+                    location = parserr.writeToCSV(subDirFolder, listOfPrey)
+                    self.alertDialogForManualClick("Results: ", listOfPrey, location)
                 else:
                     self.alertDialogForManualClick("Matching Error", "Security of row %s does not match.\n"
                                                                      "This row will be removed from final analysis." % (
                                                        i))
-
-            listOfPrey = []
-            for i in range(len(listOfOldResults)):
-                freshPrey = parserr.compareDicts(listOfOldResults[i], listOfRecentResults[i])
-                listOfPrey.append(freshPrey)
-
-            self.refreshFields([listBoxBotRight, listBoxBotLeft])
-            subDirFolder = os.path.join(self.homeDir, "Comparisons-CSV")
-            # this is horrible form but I'm tired. The method below returns file location but also does a bunch of other stuff
-            location = parserr.writeToCSV(subDirFolder, listOfPrey)
-            self.alertDialogForManualClick("Results: ", listOfPrey, location)
 
         else:
             self.alertDialogForManualClick("Indexing Error", "ListBoxes must have equal number of entries.\n"
