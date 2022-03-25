@@ -53,7 +53,7 @@ class AdvancedScraper:
 
     def getTotalPages(self):
         # WebDriverWait(self.driver, 30).until(EC.presence_of_element_located("#tblIndivResults_info"))
-        self.driver.implicitly_wait(30)
+        self.driver.implicitly_wait(10)
         totalResultsString = self.driver.find_element(By.ID, 'tblIndivResults_info')
         
         # Get all the elements available with tag name 'p'
@@ -62,13 +62,11 @@ class AdvancedScraper:
             print(e)
             print(e.text)
 
-        print("who dis")
-        print(totalResultsString.text)
+        totalResults = re.findall(r'\d{0,3}[\,]?\d{1,3}', totalResultsString.text)
+        value = totalResults[-1]
+        intValue = int(value.replace(',', ''))
 
-        totalResults = re.findall(r'\d+', totalResultsString.text)
-        print("total results: ", totalResults)
-
-        totalPagesHere = math.ceil(int(totalResults[-1]) / 100)
+        totalPagesHere = math.ceil(intValue / 100)
         return self.totalPages + totalPagesHere
 
     def getSecurityForSearch(self, entryText, listBoxSelection):
@@ -83,7 +81,7 @@ class AdvancedScraper:
         self.driver.set_page_load_timeout(30)
         self.driver.get(AdvancedScraper.baseUrlForSelenium)
         self.driver.find_element(By.ID, "textAdvSearch").click()
-        self.driver.implicitly_wait(30)
+        self.driver.implicitly_wait(10)
         firmInput = self.driver.find_element(By.ID, "txtDetSearchFirmName")
         firmInput.send_keys(searchText)
         self.driver.find_element(By.ID, "btnSearch").click()
@@ -104,15 +102,15 @@ class AdvancedScraper:
                 self.clickThroughPages()
 
     def clickThroughPages(self):
-        while self.currentPage < self.totalPages:
+        while self.currentPage <= self.totalPages:
             try:
-                WebDriverWait(self.driver, 30).until(EC.presence_of_element_located(By.ID, "tblIndivResults_next"))
-                self.driver.find_element(By.ID, "tblIndivResults_next").click();
-            except :
-                (org.openqa.selenium.StaleElementReferenceException ex)
+                WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.ID, "tblIndivResults_next")))
+                self.driver.find_element(By.ID, "tblIndivResults_next").click()
+            except:
+                print("Error finding 'next page' button")
             finally:
                 time.sleep(5)
-                self.currentPage = self.currentPage + 1
+                self.currentPage += 1
 
         if TK.alertDialogForManualClick("Alert: Export Har File",
                                         "- In DevTools Network tab click \"Export Har...\"\n"

@@ -29,11 +29,15 @@ class TkUI:
         self.config = ConfigParser()
         self.entryBox = None
         self.homeDir = self.getSaveLocation()
+        self.isSaveLocation = True
+        self.saveButton = None
+
 
     def getSaveLocation(self):
-        if self.config.read('config.ini'):
+        if self.config.read('config.ini'): # check if this file exists
             return self.config.get(self.CONFIG_SECTION, self.CONFIG_KEY)
         else:
+            self.isSaveLocation = False
             return os.path.expanduser('~')
 
     def onListSelect(self, event):
@@ -128,6 +132,12 @@ class TkUI:
         for field in fields:
             field.delete(0, END)
 
+    # def changeSaveButtonStyle(self, isAddingColor):
+    #     st = Style()
+    #     st.configure('W.TButton', background='red', foreground='green')
+    #     if isAddingColor:
+    #         self.saveButton.configure(bg='green')
+
     def generateListOfNames(self, fileNames):
         print(fileNames)
         finalList = []
@@ -197,6 +207,10 @@ class TkUI:
         # Tippy Top widgets
         saveLocationButton = Button(labelFrameTippyTop, text="Set Save Location", command=lambda: self.changeSaveDir())
         saveLocationButton.pack(side=LEFT, padx=10, pady=10)
+        self.saveButton = saveLocationButton
+        # if self.isSaveLocation:
+        #     self.changeSaveButtonStyle(True)
+
         refreshButton = Button(labelFrameTippyTop, text="Clear Fields",
                                command=lambda: self.refreshFields([listBoxBotRight, listBoxBotLeft, entry]))
         refreshButton.pack(side=LEFT, padx=10, pady=10)
