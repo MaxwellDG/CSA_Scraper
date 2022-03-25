@@ -67,6 +67,8 @@ class TkUI:
 
         with open('config.ini', 'w') as f:
             self.config.write(f)
+        
+        self.changeSaveButtonStyle(False)
 
     def alertDialogForManualClick(self, title, message, location=None):
         if type(message) == str:
@@ -118,17 +120,18 @@ class TkUI:
         for field in fields:
             field.delete(0, END)
 
-    # def changeSaveButtonStyle(self, isAddingColor):
-    #     st = Style()
-    #     st.configure('W.TButton', background='red', foreground='green')
-    #     if isAddingColor:
-    #         self.saveButton.configure(bg='green')
+    def changeSaveButtonStyle(self, isAddingColor):
+        if isAddingColor:
+            self.saveButton.configure(fg='red')
+        else:
+            self.saveButton.configure(fg="black")
+        self.saveButton.pack()
 
     def generateListOfNames(self, fileNames):
         print(fileNames)
         finalList = []
         for file in fileNames:
-            finalList.append(parserr.parse(file, self.homeDir))
+            finalList.extend(parserr.parse(file, self.homeDir))
         subDirFolder = os.path.join(self.homeDir, "Names-CSV")
         location = parserr.writeToCSV(subDirFolder, finalList)
         self.alertDialogForManualClick("Results: ", finalList, location)
@@ -194,8 +197,8 @@ class TkUI:
         saveLocationButton = Button(labelFrameTippyTop, text="Set Save Location", command=lambda: self.changeSaveDir())
         saveLocationButton.pack(side=LEFT, padx=10, pady=10)
         self.saveButton = saveLocationButton
-        # if self.isSaveLocation:
-        #     self.changeSaveButtonStyle(True)
+        if not self.isSaveLocation:
+            self.changeSaveButtonStyle(True)
 
         refreshButton = Button(labelFrameTippyTop, text="Clear Fields",
                                command=lambda: self.refreshFields([listBoxBotRight, listBoxBotLeft, entry]))
