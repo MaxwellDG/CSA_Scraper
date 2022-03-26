@@ -29,12 +29,13 @@ class TkUI:
         self.config = ConfigParser()
         self.entryBox = None
         self.homeDir = self.getSaveLocation()
-        self.isSaveLocation = True
+        self.isSaveLocation = False
         self.saveButton = None
 
 
     def getSaveLocation(self):
         if self.config.read('config.ini'): # check if this file exists
+            self.isSaveLocation = True
             return self.config.get(self.CONFIG_SECTION, self.CONFIG_KEY)
         else:
             self.isSaveLocation = False
@@ -121,6 +122,7 @@ class TkUI:
             field.delete(0, END)
 
     def changeSaveButtonStyle(self, isAddingColor):
+        print("Changing color???", isAddingColor)
         if isAddingColor:
             self.saveButton.configure(fg='red')
         else:
@@ -140,19 +142,24 @@ class TkUI:
     def initWidgets(self):
         self.root.title("CSA Registry")
 
+        canvas = Canvas(self.root)
+        canvas.pack()
+
         # Framing
-        labelFrame = LabelFrame(self.root, text="CSA Registry", padx=5, pady=5, font=('Helvetica', 14, 'bold'))
+        labelFrame = LabelFrame(canvas, text="CSA Registry", padx=5, pady=5, font=('Helvetica', 14, 'bold'))
         labelFrame.pack(padx=10, pady=10)
-        labelFrameTippyTop = LabelFrame(labelFrame, text="Utilities", font=('Helvetica', 12, 'bold'))
+        labelFrameTippyTop = LabelFrame(canvas, text="Utilities", font=('Helvetica', 12, 'bold'))
         labelFrameTippyTop.pack(side=TOP, padx=20, pady=20, expand=YES, fill=BOTH)
-        labelFrameTop = LabelFrame(labelFrame, text="Botting and .har Export", font=('Helvetica', 12, 'bold'))
-        labelFrameTop.pack(side=TOP, padx=20, pady=20, expand=True)
-        labelFrameBot = LabelFrame(labelFrame, text="Parsing and Differentiation", font=('Helvetica', 12, 'bold'))
-        labelFrameBot.pack(side=BOTTOM, padx=20, pady=20)
+        labelFrameTop = LabelFrame(canvas, text="Botting and .har Export", font=('Helvetica', 12, 'bold'))
+        labelFrameTop.pack(side=LEFT, padx=20, pady=20, expand=True)
+        labelFrameBot = LabelFrame(canvas, text="Parsing and Differentiation", font=('Helvetica', 12, 'bold'))
+        labelFrameBot.pack(side=RIGHT, padx=20, pady=20)
         frameTop = Frame(labelFrameTop)
         frameTop.pack(side=TOP)
         frameBot = Frame(labelFrameBot)
         frameBot.pack(side=BOTTOM)
+
+        canvas.create_window((0,0), window=labelFrame, anchor='nw')
 
         # Top half widgets
         entry = Entry(frameTop, width=self.securities[0].__len__() + 10)
@@ -191,13 +198,13 @@ class TkUI:
         buttonCompare.pack(side=BOTTOM, padx=10, pady=10)
         buttonLongList = Button(labelFrameBot, text="Generate Names",
                                 command=lambda: self.generateListOfNames(listBoxBotLeft.get(0, END)))
-        buttonLongList.pack(padx=10, pady=10)
+        buttonLongList.pack(side=TOP, padx=10, pady=10)
 
         # Tippy Top widgets
         saveLocationButton = Button(labelFrameTippyTop, text="Set Save Location", command=lambda: self.changeSaveDir())
         saveLocationButton.pack(side=LEFT, padx=10, pady=10)
         self.saveButton = saveLocationButton
-        if not self.isSaveLocation:
+        if not self.config.read('config.ini'):
             self.changeSaveButtonStyle(True)
 
         refreshButton = Button(labelFrameTippyTop, text="Clear Fields",
