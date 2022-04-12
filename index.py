@@ -52,15 +52,11 @@ class AdvancedScraper:
         return webdriver.Chrome(options=options)
 
     def getTotalPages(self):
-        # WebDriverWait(self.driver, 30).until(EC.presence_of_element_located("#tblIndivResults_info"))
         self.driver.implicitly_wait(10)
         totalResultsString = self.driver.find_element(By.ID, 'tblIndivResults_info')
-        
-        # Get all the elements available with tag name 'p'
-        elements = totalResultsString.find_elements(By.TAG_NAME, 'p')
-        for e in elements:
-            print(e)
-            print(e.text)
+
+        while not totalResultsString.text: # I dunno why but it takes a moment to recognize the string inside the div here
+            time.sleep(1)
 
         totalResults = re.findall(r'\d{0,3}[\,]?\d{1,3}', totalResultsString.text)
         value = totalResults[-1]
@@ -79,6 +75,7 @@ class AdvancedScraper:
     def beginEleniumNavigation(self, searchText):
         # initial navigation into search results
         self.driver.set_page_load_timeout(30)
+
         self.driver.get(AdvancedScraper.baseUrlForSelenium)
         self.driver.find_element(By.ID, "textAdvSearch").click()
         self.driver.implicitly_wait(10)
@@ -88,7 +85,6 @@ class AdvancedScraper:
 
         # record the total pages so Selenium knows the limit for "NextPage" clicks
         self.totalPages = self.getTotalPages()
-
         # start Preserve Logs before first 100-person packet is sent
         if TK.alertDialogForManualClick(
                 "Alert: Preserve Logs",
