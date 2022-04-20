@@ -1,10 +1,15 @@
 import math
 import time
 import re
+from tkinter import E
+
+import selenium
 
 import tkui
 
 from selenium import webdriver
+from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -97,16 +102,18 @@ class AdvancedScraper:
                 elementSelectLength.select_by_index(3)
                 self.clickThroughPages()
 
+
     def clickThroughPages(self):
         while self.currentPage <= self.totalPages:
             try:
-                WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.ID, "tblIndivResults_next")))
                 self.driver.find_element(By.ID, "tblIndivResults_next").click()
-            except:
-                print("Error finding 'next page' button")
-            finally:
-                time.sleep(5)
                 self.currentPage += 1
+            except ElementClickInterceptedException as ex:
+                self.driver.execute_script("window.scrollTo(0, 100)") # wiggle off the obscured image
+            except StaleElementReferenceException:
+                print('Stale element. Continue')
+            finally:
+                time.sleep(3)
 
         if TK.alertDialogForManualClick("Alert: Export Har File",
                                         "- In DevTools Network tab click \"Export Har...\"\n"
