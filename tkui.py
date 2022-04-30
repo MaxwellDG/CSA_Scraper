@@ -122,7 +122,6 @@ class TkUI:
             field.delete(0, END)
 
     def changeSaveButtonStyle(self, isAddingColor):
-        print("Changing color???", isAddingColor)
         if isAddingColor:
             self.saveButton.configure(fg='red')
         else:
