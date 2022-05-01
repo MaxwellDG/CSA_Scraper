@@ -129,7 +129,6 @@ class TkUI:
         self.saveButton.pack()
 
     def generateListOfNames(self, fileNames):
-        print(fileNames)
         finalList = []
         for file in fileNames:
             finalList.extend(parserr.parse(file, self.homeDir))

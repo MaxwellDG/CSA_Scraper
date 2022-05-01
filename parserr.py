@@ -14,9 +14,10 @@ def parse(activeFile, activeDir):
         data = json.load(f) # deserialize file
         for entry in data['log']['entries']:
             memberListSerialized = entry['response']['content']['text']
-            memberListDeSerialized = json.loads(memberListSerialized) # an extra deserialize for the mega long string data
-            parsedMembers = memberListDeSerialized['d']['data']
-            finalList.extend(parsedMembers)
+            if(len(memberListSerialized) > 0):
+                memberListDeSerialized = json.loads(memberListSerialized)
+                parsedMembers = memberListDeSerialized['d']['data']
+                finalList.extend(parsedMembers)
     print('Length of final list:', len(finalList))
     return finalList
 
