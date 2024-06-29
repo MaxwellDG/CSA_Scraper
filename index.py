@@ -22,19 +22,27 @@ class AdvancedScraper:
 
     baseUrl = "https://www.securities-administrators.ca/nrs"
     baseUrlForSelenium = "https://www.securities-administrators.ca/nrs/nrsearchprep.aspx"
-    securities = ["BMO NESBITT BURNS",
-                  "CIBC WORLD MARKETS",
-                  "EDWARD JONES",
-                  "IPC INVESTMENT CORPORATION",
-                  "LEEDE JONES GABLE INC.",
-                  "MACKIE RESEARCH CAPITAL",
-                  "NATIONAL BANK FINANCIAL",
-                  "PI FINANCIAL CORP",
-                  "RAYMOND JAMES LTD.",
-                  "RBC DOMINION SECURITIES",
-                  "RICHARDSON GMP LIMITED",
-                  "SCOTIA SECURITIES",
-                  "TD SECURITIES"]
+    securities = [
+        "BMO NESBITT BURNS",
+        "CIBC WORLD MARKETS",
+        "EDWARD JONES",
+        "IPC INVESTMENT CORPORATION",
+        "LEEDE JONES GABLE INC.",
+        "MACKIE RESEARCH CAPITAL",
+        "NATIONAL BANK FINANCIAL",
+        "VENTUM FINANCIAL CORP",
+        "iA Private Wealth",
+        "Aligned Capital Partners",
+        "DESJARDINS SECURITIES",
+        "ATB SECURITIES	",
+        "HAYWOOD SECURITIES",
+        "Canaccord Genuity Corp",
+        "RAYMOND JAMES LTD.",
+        "RBC DOMINION SECURITIES",
+        "RICHARDSON GMP LIMITED",
+        "SCOTIA SECURITIES",
+        "TD SECURITIES"
+    ]
 
     def __init__(self):
         self.currentPage = 1
