@@ -17,32 +17,32 @@ from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 
+securities = [
+    "BMO NESBITT BURNS",
+    "CIBC WORLD MARKETS",
+    "EDWARD JONES",
+    "IPC INVESTMENT CORPORATION",
+    "LEEDE JONES GABLE INC.",
+    "MACKIE RESEARCH CAPITAL",
+    "NATIONAL BANK FINANCIAL",
+    "VENTUM FINANCIAL CORP",
+    "iA Private Wealth",
+    "Aligned Capital Partners",
+    "DESJARDINS SECURITIES",
+    "ATB SECURITIES	",
+    "HAYWOOD SECURITIES",
+    "Canaccord Genuity Corp",
+    "RAYMOND JAMES LTD.",
+    "RBC DOMINION SECURITIES",
+    "RICHARDSON GMP LIMITED",
+    "SCOTIA SECURITIES",
+    "TD SECURITIES"
+]
 
 class AdvancedScraper:
 
     baseUrl = "https://www.securities-administrators.ca/nrs"
     baseUrlForSelenium = "https://www.securities-administrators.ca/nrs/nrsearchprep.aspx"
-    securities = [
-        "BMO NESBITT BURNS",
-        "CIBC WORLD MARKETS",
-        "EDWARD JONES",
-        "IPC INVESTMENT CORPORATION",
-        "LEEDE JONES GABLE INC.",
-        "MACKIE RESEARCH CAPITAL",
-        "NATIONAL BANK FINANCIAL",
-        "VENTUM FINANCIAL CORP",
-        "iA Private Wealth",
-        "Aligned Capital Partners",
-        "DESJARDINS SECURITIES",
-        "ATB SECURITIES	",
-        "HAYWOOD SECURITIES",
-        "Canaccord Genuity Corp",
-        "RAYMOND JAMES LTD.",
-        "RBC DOMINION SECURITIES",
-        "RICHARDSON GMP LIMITED",
-        "SCOTIA SECURITIES",
-        "TD SECURITIES"
-    ]
 
     def __init__(self):
         self.currentPage = 1
@@ -55,8 +55,9 @@ class AdvancedScraper:
         self.driver = self.initDriver()
 
     def initDriver(self):
-        # webdriver.Chrome(ChromeDriverManager().install()) # <--- holy grail? How do I find if it's already present
-        # though.. (for a conditional check)
+        driver = ChromeDriverManager().install()
+        cService = webdriver.ChromeService(executable_path=driver)
+        webdriver.Chrome(service=cService)
         options = webdriver.ChromeOptions()
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--incognito')

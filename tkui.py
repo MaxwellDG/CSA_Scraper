@@ -4,6 +4,7 @@ from tkinter import filedialog as fileDialog
 import os
 from configparser import ConfigParser
 import parserr
+from index import securities
 
 
 class TkUI:
@@ -12,19 +13,7 @@ class TkUI:
 
     def __init__(self, advancedScraper):
         self.root = Tk()
-        self.securities = ["BMO NESBITT BURNS",
-                           "CIBC WORLD MARKETS",
-                           "EDWARD JONES",
-                           "IPC INVESTMENT CORPORATION",
-                           "LEEDE JONES GABLE INC.",
-                           "MACKIE RESEARCH CAPITAL",
-                           "NATIONAL BANK FINANCIAL",
-                           "PI FINANCIAL CORP",
-                           "RAYMOND JAMES LTD.",
-                           "RBC DOMINION SECURITIES",
-                           "RICHARDSON GMP LIMITED",
-                           "SCOTIA SECURITIES",
-                           "TD SECURITIES"]
+        self.securities = securities
         self.scraper = advancedScraper
         self.config = ConfigParser()
         self.entryBox = None
@@ -198,7 +187,7 @@ class TkUI:
                                 command=lambda: self.generateListOfNames(listBoxBotLeft.get(0, END)))
         buttonLongList.pack(side=TOP, padx=10, pady=10)
 
-        # Tippy Top widgets
+        # Very top widgets
         saveLocationButton = Button(labelFrameTippyTop, text="Set Save Location", command=lambda: self.changeSaveDir())
         saveLocationButton.pack(side=LEFT, padx=10, pady=10)
         self.saveButton = saveLocationButton
