@@ -64,7 +64,6 @@ class TkUI:
         if type(message) == str:
             return tkMessageBox.askokcancel(title=title, message=message)
         else:
-            print('Message', message)
             totalSize = len(message)
             dialogResponse = tkMessageBox.askokcancel(title=title, message="There are %d heads to hunt \n\n"
                                                                            "Find them at: %s" % (totalSize, location))
@@ -88,8 +87,6 @@ class TkUI:
                 recentFileParsed = parserr.parse(recentFiles[i], self.homeDir)
                 if parserr.isComparisonOfSameSecurity(oldFiles[i], recentFiles[i], self.homeDir):
                     listOfPrey = parserr.compareDicts(oldFileParsed, recentFileParsed)
-
-                    print("List of prey:", listOfPrey)
 
                     self.refreshFields([listBoxBotRight, listBoxBotLeft])
                     subDirFolder = os.path.join(self.homeDir, "Comparisons-CSV")

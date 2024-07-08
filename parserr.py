@@ -13,8 +13,8 @@ def parse(activeFile, activeDir):
     with open(workingFile, encoding="utf8") as f:
         data = json.load(f) # deserialize file
         for entry in data['log']['entries']:
-            memberListSerialized = entry['response']['content']['text']
-            if(len(memberListSerialized) > 0):
+            memberListSerialized = entry.get('response', {}).get('content', {}).get('text')
+            if(memberListSerialized and len(memberListSerialized) > 0):
                 memberListDeSerialized = json.loads(memberListSerialized)
                 parsedMembers = memberListDeSerialized['d']['data']
                 finalList.extend(parsedMembers)
